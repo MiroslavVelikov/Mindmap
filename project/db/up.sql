@@ -9,7 +9,9 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS projects (
     id UUID PRIMARY KEY CHECK (id <> '00000000-0000-0000-0000-000000000000'),
     name VARCHAR(32) NOT NULL,
-    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    created_at DATE NOT NULL,
+    modified_at DATE NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS nodes (
@@ -33,5 +35,35 @@ CREATE TABLE IF NOT EXISTS styles (
     style VARCHAR(32) NOT NULL,
     PRIMARY KEY (node_id, stl_type)
 );
+
+CREATE OR REPLACE FUNCTION modify_created_at_time_field()
+    RETURNS TRIGGER AS
+$$
+BEGIN
+    NEW.created_at = CURRENT_TIMESTAMP;
+    RETURN NEW;
+END;
+$$
+    LANGUAGE PLPGSQL;
+
+CREATE OR REPLACE FUNCTION modify_modified_at_time_field()
+    RETURNS TRIGGER AS
+$$
+BEGIN
+    NEW.modified_at = CURRENT_TIMESTAMP;
+    RETURN NEW;
+END;
+$$
+    LANGUAGE PLPGSQL;
+
+CREATE TRIGGER modify_time_field_when_created
+    BEFORE INSERT ON projects
+    FOR EACH ROW
+EXECUTE FUNCTION modify_created_at_time_field();
+
+CREATE TRIGGER modify_time_field_when_updated_project
+    BEFORE INSERT ON projects
+    FOR EACH ROW
+EXECUTE FUNCTION modify_modified_at_time_field();
 
 COMMIT;

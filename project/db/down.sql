@@ -12,4 +12,8 @@ DROP TABLE IF EXISTS projects CASCADE;
 
 DROP TABLE IF EXISTS users CASCADE;
 
+DROP FUNCTION IF EXISTS modify_time_field_when_created();
+
+DROP FUNCTION IF EXISTS modify_time_field_when_updated_project();
+
 COMMIT;
