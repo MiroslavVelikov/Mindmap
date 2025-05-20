@@ -31,6 +31,6 @@ func main() {
 		w.Write([]byte("Mindmap"))
 	})
 
-	fmt.Println("Backend running on :8080")
+	fmt.Println("Backend running on: 8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }

@@ -1,0 +1,91 @@
+type Query {
+  user(user: User): UserOutput
+  project(projectId: ID!): ProjectInfoOutput @isLoggedIn
+  projects(userId: ID!): ProjectInfoConnection! @isOwner
+  node(nodeId: ID!): NodeOutput @isLoggedIn
+  nodes(projectId: ID!, first: Int, after: ID): NodeLevelConnection! @isLoggedIn
+}
+
+type Mutation {
+  createUser(user: User!): UserOutput
+  createProject(project: Project!): ProjectInfoOutput @isLoggedIn
+  updateProjectName(projectId: ID!, project: Project!): ProjectInfoOutput @isOwner
+  deleteProject(projectId: ID!): ProjectInfoOutput @isOwner
+  createNode(node: Node!): NodeOutput @isOwner
+  updateNode(node: Node, styles: [Style]): NodeOutput @isOwner
+  deleteNode(nodeId: ID!): NodeOutput @isOwner
+}
+
+# inputs
+input User {
+  username: String!
+  password: String!
+}
+
+input Project {
+  name: String!
+  userId: ID!
+}
+
+input Node {
+  value: String
+  parentId: ID
+}
+
+input Style {
+  nodeId: ID!
+  type: String!
+  value: String!
+}
+
+# structures
+type UserOutput {
+  id: ID!
+  username: String!
+}
+
+type ProjectInfoOutput {
+  id: ID!
+  name: String!
+  userId: ID!
+  createdAt: Time!
+  modifiedAt: Time!
+}
+
+type StyleOutput {
+  nodeId: ID!
+  styleType: String!
+  style: String!
+}
+
+type NodeOutput {
+  id: ID!
+  value: String
+  parentId: ID
+  styles: [StyleOutput!]!
+} 
+
+type ProjectInfoConnection {
+  totalCount: Int
+  projects: [ProjectInfoOutput]
+  pageInfo: PageInfo!
+}
+
+type NodeLevelConnection {
+  totalCount: Int
+  nodeLevels: [NodeOutput]
+  pageInfo: PageInfo!
+}
+
+type PageInfo {
+  startCursor: ID
+  endCursor: ID
+  hasNextPage: Boolean!
+}
+
+# new types
+scalar Time
+
+# directives
+directive @isLoggedIn on FIELD_DEFINITION
+directive @isOwner on FIELD_DEFINITION
