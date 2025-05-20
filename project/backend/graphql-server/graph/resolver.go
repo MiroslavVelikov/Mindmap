@@ -4,4 +4,19 @@ package graph
 //
 // It serves as dependency injection for your app, add any dependencies you require here.
 
-type Resolver struct{}
+type ServiceProjectInterface interface {
+}
+
+type ServiceUserInterface interface {
+}
+
+type ServiceNodeInterface interface {
+}
+
+type Resolver struct{
+	
+}
+
+func NewResolver() *Resolver {
+	return &Resolver{}
+}

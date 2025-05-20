@@ -22,12 +22,12 @@ CREATE TABLE IF NOT EXISTS nodes (
 
 CREATE TABLE IF NOT EXISTS connections (
     project_id UUID NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
-    node_id UUID NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+    node_id UUID NOT NULL REFERENCES nodes(id) ON DELETE CASCADE,
     PRIMARY KEY (project_id, node_id)
 );
 
 CREATE TYPE style_type
-AS ENUM("font", "textColor", "nodeColor", "borderColor");
+AS ENUM('font', 'textColor', 'nodeColor', 'borderColor');
 
 CREATE TABLE IF NOT EXISTS styles (
     node_id UUID NOT NULL REFERENCES nodes(id) ON DELETE CASCADE,
@@ -62,7 +62,7 @@ CREATE TRIGGER modify_time_field_when_created
 EXECUTE FUNCTION modify_created_at_time_field();
 
 CREATE TRIGGER modify_time_field_when_updated_project
-    BEFORE INSERT ON projects
+    BEFORE UPDATE ON projects
     FOR EACH ROW
 EXECUTE FUNCTION modify_modified_at_time_field();
 
