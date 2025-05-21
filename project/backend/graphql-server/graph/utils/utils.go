@@ -7,7 +7,15 @@ import (
 	"github.com/kelseyhightower/envconfig"
 )
 
-const postgres = "postgres"
+const (
+	postgres = "postgres"
+	Logger   = "logger"
+
+	UNIQUE_VIOLATION      = "23505"
+	FOREIGN_KEY_VIOLATION = "23503"
+	NOT_NULL_VIOLATION    = "23502"
+	UNCLASIFIED_ERROR     = "unclassified error: %w"
+)
 
 type Config struct {
 	DbUser     string `envconfig:"DB_USER"`

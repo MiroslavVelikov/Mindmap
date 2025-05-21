@@ -13,10 +13,12 @@ type ServiceUserInterface interface {
 type ServiceNodeInterface interface {
 }
 
-type Resolver struct{
-	
+type Resolver struct {
+	serviceUser ServiceUserInterface
 }
 
-func NewResolver() *Resolver {
-	return &Resolver{}
+func NewResolver(serviceUser ServiceNodeInterface) *Resolver {
+	return &Resolver{
+		serviceUser: serviceUser,
+	}
 }

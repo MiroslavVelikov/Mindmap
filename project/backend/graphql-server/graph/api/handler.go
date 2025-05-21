@@ -2,6 +2,7 @@ package api
 
 import (
 	"mindmap-backend/graphql-server/graph"
+	"mindmap-backend/graphql-server/graph/user"
 	"mindmap-backend/graphql-server/graph/utils"
 	"net/http"
 
@@ -25,7 +26,15 @@ func ServerHandler() {
 	}
 	defer db.Close()
 
-	resolver := graph.NewResolver()
+	repositoryUser := user.NewDBRepositoryUser(db)
+	serviceUser := user.NewServiceUser(repositoryUser)
+
+	// TBA Project
+
+	// TBA Node
+
+	// TBA to resolver ctor
+	resolver := graph.NewResolver(serviceUser)
 	server := handler.New(graph.NewExecutableSchema(graph.Config{
 		Resolvers: resolver,
 	}))
